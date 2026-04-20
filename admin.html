@@ -1,221 +1,820 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard — Brand Creations</title>
+  <title>Admin — Brand Creations</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
 
-  <!-- ─── LOGIN SCREEN ─── -->
-  <div class="login-wrap" id="loginScreen">
-    <div class="login-card">
-      <div class="login-logo">BRAND <span>CREATIONS</span></div>
-      <p class="login-sub">Admin access only. Enter your password to continue.</p>
+<!-- ══════════════ LOGIN ══════════════ -->
+<div class="login-wrap" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">BRAND <span>CREATIONS</span></div>
+    <p class="login-sub">Admin Dashboard — authorised access only.</p>
+    <div class="field" style="margin-bottom:20px">
+      <label for="pwInput">Password</label>
+      <input type="password" id="pwInput" placeholder="••••••••"
+             onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <button class="btn-primary" onclick="doLogin()" style="width:100%;justify-content:center;">
+      Sign In
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <p class="login-error" id="loginError">Incorrect password. Please try again.</p>
+  </div>
+</div>
 
-      <div class="field">
-        <label for="pwInput">Password</label>
-        <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
-      </div>
-      <button class="btn-primary" onclick="doLogin()" style="width:100%; justify-content:center;">
-        Sign In
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div class="admin-shell" id="adminShell">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-logo">BRAND <span>CREATIONS</span></div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-item active" data-page="analytics">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="6" height="18"/><rect x="9" y="8" width="6" height="13"/><rect x="16" y="12" width="6" height="9"/></svg>
+        Analytics
       </button>
-      <p class="login-error" id="loginError">Incorrect password. Please try again.</p>
+      <button class="sidebar-item" data-page="upload">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        Upload
+      </button>
+      <button class="sidebar-item" data-page="posts">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        Manage Posts
+      </button>
+      <button class="sidebar-item" data-page="reorder">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><polyline points="16 8 18 6 20 8"/><polyline points="16 16 18 18 20 16"/></svg>
+        Reorder Posts
+      </button>
+      <button class="sidebar-item" data-page="settings">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+        Settings
+      </button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="btn-logout" onclick="doLogout()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Log Out
+      </button>
     </div>
-  </div>
+  </aside>
 
-  <!-- ─── ADMIN DASHBOARD ─── -->
-  <div class="admin-shell" id="adminShell">
-
+  <!-- Main -->
+  <div class="admin-main">
     <div class="admin-topbar">
-      <div class="topbar-logo">BRAND <span>CREATIONS</span> <small style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink-3);font-weight:400;margin-left:8px;">Admin</small></div>
-      <button class="btn-logout" onclick="doLogout()">Log Out</button>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button id="sidebarToggle" class="hamburger" style="display:flex" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <span class="topbar-title" id="topbarTitle">Analytics</span>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode"></button>
+        <a href="index.html" target="_blank" class="btn-sm" style="text-decoration:none;padding:8px 16px;">View Site ↗</a>
+      </div>
     </div>
 
-    <div class="admin-content">
+    <div class="admin-pages">
 
-      <!-- Upload Card -->
-      <div class="admin-card">
-        <div class="admin-card-title">Upload New Design</div>
+      <!-- ── PAGE: ANALYTICS ── -->
+      <div class="admin-page active" id="page-analytics">
+        <div class="analytics-grid" id="analyticsGrid">
+          <div class="analytics-card"><div class="analytics-num" id="aTotalPosts">–</div><div class="analytics-label">Total Designs</div></div>
+          <div class="analytics-card"><div class="analytics-num" id="aTotalCats">–</div><div class="analytics-label">Categories</div></div>
+          <div class="analytics-card"><div class="analytics-num" id="aFeatured">–</div><div class="analytics-label">Featured</div></div>
+          <div class="analytics-card"><div class="analytics-num" id="aLatestCat" style="font-size:22px;margin-top:6px;">–</div><div class="analytics-label">Newest Category</div></div>
+        </div>
 
-        <div class="upload-form">
-          <div class="field">
-            <label for="designTitle">Project Title</label>
-            <input type="text" id="designTitle" placeholder="e.g. Logo for Acme Brand">
-          </div>
+        <!-- Category breakdown -->
+        <div class="admin-card">
+          <div class="admin-card-title">Category Breakdown</div>
+          <div id="catBreakdown" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </div>
 
-          <div class="field">
-            <label for="designCategory">Category</label>
-            <input type="text" id="designCategory" placeholder="e.g. Logo, Branding, Social Media, Poster…">
-          </div>
-
-          <div class="field">
-            <label for="imageInput">Image File</label>
-            <input type="file" id="imageInput" accept="image/*">
-          </div>
-
-          <button class="btn-primary" onclick="handleUpload()">
-            Upload to Portfolio
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-          </button>
-
-          <p id="uploadStatus"></p>
+        <!-- Recent uploads -->
+        <div class="admin-card">
+          <div class="admin-card-title">Recent Uploads</div>
+          <div class="recent-list" id="recentList"><p style="color:var(--ink-3);font-size:14px">No uploads yet.</p></div>
         </div>
       </div>
 
-      <!-- Manage Posts Card -->
-      <div class="admin-card">
-        <div class="admin-card-title">Manage Posts</div>
-        <div id="postsContainer">
-          <div class="posts-empty">Loading posts…</div>
+      <!-- ── PAGE: UPLOAD ── -->
+      <div class="admin-page" id="page-upload">
+        <div class="admin-card">
+          <div class="admin-card-title">Upload New Design</div>
+          <div class="upload-form">
+
+            <div class="form-row">
+              <div class="field">
+                <label for="designTitle">Project Title *</label>
+                <input type="text" id="designTitle" placeholder="e.g. Logo for Acme Brand">
+              </div>
+              <div class="field">
+                <label for="designCategory">Category *</label>
+                <input type="text" id="designCategory" placeholder="Logo, Branding, Social Media…" id="designCategory" list="catSuggestions">
+                <datalist id="catSuggestions"></datalist>
+              </div>
+            </div>
+
+            <!-- Image drop zone -->
+            <div class="field">
+              <label>Image *</label>
+              <div class="img-preview-wrap" id="dropZone">
+                <div class="img-preview-placeholder">
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span>Click to select or drag & drop an image</span>
+                </div>
+                <img id="imgPreview" src="" alt="" style="display:none">
+                <button class="img-clear-btn" id="imgClearBtn" type="button" title="Remove">✕</button>
+              </div>
+              <input type="file" id="imageInput" accept="image/*" style="display:none">
+            </div>
+
+            <div class="field" style="flex-direction:row;align-items:center;gap:12px;">
+              <input type="checkbox" id="featuredCheck" style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent);">
+              <label for="featuredCheck" style="text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink-2);cursor:pointer;">Mark as Featured (pinned with gold border in portfolio)</label>
+            </div>
+
+            <div class="upload-progress" id="uploadProgress">
+              <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            </div>
+
+            <button class="btn-primary" onclick="handleUpload()">
+              Upload to Portfolio
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            </button>
+            <p id="uploadStatus"></p>
+          </div>
         </div>
       </div>
 
+      <!-- ── PAGE: MANAGE POSTS ── -->
+      <div class="admin-page" id="page-posts">
+        <div class="admin-card">
+          <div class="admin-card-title">
+            All Posts
+            <span id="postCount" style="font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink-3);font-weight:400;"></span>
+          </div>
+          <div class="posts-toolbar">
+            <input class="search-input" type="text" id="searchInput" placeholder="Search by title or category…">
+            <select class="search-input" id="filterCat" style="max-width:200px;flex:none;cursor:pointer;">
+              <option value="">All Categories</option>
+            </select>
+            <button class="btn-sm" onclick="sortPosts('newest')">Newest</button>
+            <button class="btn-sm" onclick="sortPosts('oldest')">Oldest</button>
+            <button class="btn-sm" onclick="sortPosts('az')">A–Z</button>
+          </div>
+          <div id="postsContainer"><p class="posts-empty">Loading…</p></div>
+        </div>
+      </div>
+
+      <!-- ── PAGE: REORDER ── -->
+      <div class="admin-page" id="page-reorder">
+        <div class="admin-card">
+          <div class="admin-card-title">
+            Drag to Reorder
+            <div style="display:flex;gap:10px;align-items:center;">
+              <span id="reorderStatus" style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink-3);font-weight:400;"></span>
+              <button class="btn-primary" id="saveOrderBtn" onclick="saveOrder()" style="padding:9px 20px;font-size:13px;display:none;">
+                Save Order
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </div>
+          </div>
+          <p style="font-size:13px;color:var(--ink-3);margin-bottom:20px;">
+            Drag the <strong style="color:var(--ink)">≡</strong> handle to reorder. Click <em>Save Order</em> to apply to the live portfolio.
+          </p>
+          <div id="reorderList" style="display:flex;flex-direction:column;gap:8px;">
+            <p class="posts-empty">Loading…</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PAGE: SETTINGS ── -->
+      <div class="admin-page" id="page-settings">
+        <div class="admin-card">
+          <div class="admin-card-title">Site Settings</div>
+          <div class="settings-form">
+            <div class="settings-section-title">Appearance</div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Dark Mode</div><div class="toggle-sub">Switch between light and dark theme</div></div>
+              <button class="toggle-switch" id="settingsDark" onclick="toggleSetting(this)"></button>
+            </div>
+            <div class="settings-section-title">Portfolio</div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Show Featured Badge</div><div class="toggle-sub">Display gold badge on featured designs</div></div>
+              <button class="toggle-switch on" id="settingsFeaturedBadge" onclick="toggleSetting(this)"></button>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Show Stats Bar</div><div class="toggle-sub">Show the project count and category stats</div></div>
+              <button class="toggle-switch on" id="settingsStats" onclick="toggleSetting(this)"></button>
+            </div>
+            <div class="settings-section-title">Change Admin Password</div>
+            <div class="field">
+              <label for="currPw">Current Password</label>
+              <input type="password" id="currPw" placeholder="••••••••">
+            </div>
+            <div class="field">
+              <label for="newPw">New Password</label>
+              <input type="password" id="newPw" placeholder="Minimum 6 characters">
+            </div>
+            <div class="field">
+              <label for="confPw">Confirm New Password</label>
+              <input type="password" id="confPw" placeholder="Re-enter new password">
+            </div>
+            <button class="btn-primary" onclick="changePassword()" style="margin-top:4px;">Update Password</button>
+            <p id="pwChangeStatus" style="font-size:13px;margin-top:8px;"></p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /admin-pages -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-shell -->
+
+<!-- ══════ EDIT MODAL ══════ -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <div class="modal-title">Edit Design</div>
+    <input type="hidden" id="editId">
+    <div class="field" style="margin-bottom:16px">
+      <label for="editTitle">Title</label>
+      <input type="text" id="editTitle" placeholder="Project title">
+    </div>
+    <div class="field" style="margin-bottom:16px">
+      <label for="editCat">Category</label>
+      <input type="text" id="editCat" placeholder="Category">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveEdit()">Save Changes</button>
     </div>
   </div>
+</div>
 
-  <script type="module">
-    import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot }
-      from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!-- ══════ IMAGE ZOOM MODAL ══════ -->
+<div class="modal-overlay" id="zoomModal" onclick="closeZoom()">
+  <div style="max-width:80vw;max-height:85vh;">
+    <img id="zoomImg" src="" alt="" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;">
+  </div>
+</div>
 
-    // ── KEEP CONFIGS INTACT ──
-    const firebaseConfig = {
-      apiKey: "AIzaSyDpqsGsSb2Tsr9pvYdTJ-Spwazn06USVT4",
-      authDomain: "myportfolio-2df2d.firebaseapp.com",
-      projectId: "myportfolio-2df2d",
-      storageBucket: "myportfolio-2df2d.firebasestorage.app",
-      messagingSenderId: "352039299631",
-      appId: "1:352039299631:web:fee9e9fa9da5bd479634da",
-      measurementId: "G-LP623XPYR9"
-    };
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, query, orderBy, onSnapshot }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    const imgbb_api_key = "3defd2c239f53c492eaa9b7e3bc62687";
+  /* ── CONFIGS (unchanged) ── */
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpqsGsSb2Tsr9pvYdTJ-Spwazn06USVT4",
+    authDomain: "myportfolio-2df2d.firebaseapp.com",
+    projectId: "myportfolio-2df2d",
+    storageBucket: "myportfolio-2df2d.firebasestorage.app",
+    messagingSenderId: "352039299631",
+    appId: "1:352039299631:web:fee9e9fa9da5bd479634da",
+    measurementId: "G-LP623XPYR9"
+  };
+  const imgbb_api_key = "3defd2c239f53c492eaa9b7e3bc62687";
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
 
-    // ── LOGIN ──
-    const ADMIN_PASSWORD = 'admin123';
+  /* ── PASSWORD (persisted in localStorage) ── */
+  let adminPassword = localStorage.getItem('bc-admin-pw') || 'admin123';
 
-    window.doLogin = function () {
-      const pw = document.getElementById('pwInput').value;
-      if (pw === ADMIN_PASSWORD) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminShell').style.display  = 'block';
-        startListening();
-      } else {
-        document.getElementById('loginError').style.display = 'block';
-        document.getElementById('pwInput').value = '';
-        document.getElementById('pwInput').focus();
-      }
-    };
+  /* ── DARK MODE ── */
+  const themeToggle   = document.getElementById('themeToggle');
+  const settingsDark  = document.getElementById('settingsDark');
+  const savedTheme    = localStorage.getItem('bc-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (savedTheme === 'dark') settingsDark.classList.add('on');
 
-    window.doLogout = function () {
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('adminShell').style.display  = 'none';
+  themeToggle.addEventListener('click', applyThemeToggle);
+  function applyThemeToggle() {
+    const curr = document.documentElement.getAttribute('data-theme');
+    const next = curr === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('bc-theme', next);
+    settingsDark.classList.toggle('on', next === 'dark');
+  }
+
+  /* ── LOGIN ── */
+  window.doLogin = function() {
+    const pw = document.getElementById('pwInput').value;
+    if (pw === adminPassword) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminShell').style.display  = 'block';
+      startListening();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
       document.getElementById('pwInput').value = '';
+      document.getElementById('pwInput').focus();
+    }
+  };
+
+  window.doLogout = function() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminShell').style.display  = 'none';
+    document.getElementById('pwInput').value = '';
+  };
+
+  /* ── SIDEBAR NAV ── */
+  document.querySelectorAll('.sidebar-item[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('page-' + btn.dataset.page).classList.add('active');
+      document.getElementById('topbarTitle').textContent = btn.textContent.trim();
+      if (window.innerWidth <= 1024) closeSidebar();
+    });
+  });
+
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    const sidebar = document.getElementById('adminSidebar');
+    sidebar.classList.toggle('open');
+    // Add/remove backdrop
+    if (sidebar.classList.contains('open')) {
+      const bd = document.createElement('div');
+      bd.className = 'sidebar-backdrop'; bd.id = 'sidebarBackdrop';
+      bd.addEventListener('click', closeSidebar);
+      document.body.appendChild(bd);
+    } else {
+      closeSidebar();
+    }
+  });
+  function closeSidebar() {
+    document.getElementById('adminSidebar').classList.remove('open');
+    const bd = document.getElementById('sidebarBackdrop');
+    if (bd) bd.remove();
+  }
+
+  /* ── IMAGE DROP ZONE ── */
+  const dropZone   = document.getElementById('dropZone');
+  const imageInput = document.getElementById('imageInput');
+  const imgPreview = document.getElementById('imgPreview');
+
+  dropZone.addEventListener('click', () => imageInput.click());
+  imageInput.addEventListener('change', () => previewFile(imageInput.files[0]));
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = 'var(--accent)'; });
+  dropZone.addEventListener('dragleave', () => dropZone.style.borderColor = '');
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = '';
+    if (e.dataTransfer.files[0]) previewFile(e.dataTransfer.files[0]);
+  });
+
+  function previewFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      imgPreview.src = ev.target.result;
+      imgPreview.style.display = 'block';
+      dropZone.querySelector('.img-preview-placeholder').style.display = 'none';
+      dropZone.classList.add('has-image');
     };
+    reader.readAsDataURL(file);
+    // Fake file transfer to input
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    imageInput.files = dt.files;
+  }
 
-    // ── UPLOAD ──
-    window.handleUpload = async function () {
-      const title    = document.getElementById('designTitle').value.trim();
-      const category = document.getElementById('designCategory').value.trim();
-      const fileInput = document.getElementById('imageInput');
-      const status   = document.getElementById('uploadStatus');
+  document.getElementById('imgClearBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    imgPreview.src = ''; imgPreview.style.display = 'none';
+    dropZone.querySelector('.img-preview-placeholder').style.display = 'flex';
+    dropZone.classList.remove('has-image');
+    imageInput.value = '';
+  });
 
-      if (!title || !category || !fileInput.files[0]) {
-        alert("කරුණාකර Title, Category සහ Image ඇතුළත් කරන්න!");
-        return;
-      }
+  /* ── UPLOAD ── */
+  window.handleUpload = async function() {
+    const title    = document.getElementById('designTitle').value.trim();
+    const category = document.getElementById('designCategory').value.trim();
+    const file     = imageInput.files[0];
+    const featured = document.getElementById('featuredCheck').checked;
+    const status   = document.getElementById('uploadStatus');
+    const progWrap = document.getElementById('uploadProgress');
+    const fill     = document.getElementById('progressFill');
 
-      status.className = '';
-      status.textContent = "Uploading image to ImgBB…";
-
-      const formData = new FormData();
-      formData.append("image", fileInput.files[0]);
-
-      try {
-        const res  = await fetch(`https://api.imgbb.com/1/upload?key=${imgbb_api_key}`, {
-          method: "POST", body: formData
-        });
-        const data = await res.json();
-        const imageUrl = data.data.url;
-
-        status.textContent = "Saving to Firestore…";
-
-        await addDoc(collection(db, "designs"), {
-          title,
-          category,
-          image: imageUrl,
-          timestamp: new Date()
-        });
-
-        status.className = 'success';
-        status.textContent = "✅ සාර්ථකව Upload වුණා!";
-        document.getElementById('designTitle').value    = '';
-        document.getElementById('designCategory').value = '';
-        fileInput.value = '';
-
-      } catch (err) {
-        console.error(err);
-        status.className = 'error';
-        status.textContent = "❌ Upload අසාර්ථකයි. නැවත උත්සාහ කරන්න.";
-      }
-    };
-
-    // ── LIVE POSTS LIST ──
-    function startListening() {
-      const q = query(collection(db, "designs"), orderBy("timestamp", "desc"));
-      onSnapshot(q, (snapshot) => {
-        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderPosts(docs);
-      });
+    if (!title || !category || !file) {
+      alert("Please fill in Title, Category, and select an Image.");
+      return;
     }
 
-    function renderPosts(docs) {
-      const container = document.getElementById('postsContainer');
+    status.className = ''; status.textContent = "Uploading image…";
+    progWrap.style.display = 'block'; fill.style.width = '20%';
 
-      if (docs.length === 0) {
-        container.innerHTML = '<div class="posts-empty">No designs uploaded yet.</div>';
-        return;
-      }
+    const formData = new FormData();
+    formData.append("image", file);
 
-      // Group by category
-      const groups = {};
-      docs.forEach(d => {
-        const cat = d.category || 'Uncategorised';
-        if (!groups[cat]) groups[cat] = [];
-        groups[cat].push(d);
-      });
+    try {
+      fill.style.width = '50%';
+      const res  = await fetch(`https://api.imgbb.com/1/upload?key=${imgbb_api_key}`, { method:"POST", body:formData });
+      const data = await res.json();
+      const imageUrl = data.data.url;
+      fill.style.width = '80%';
 
-      container.innerHTML = Object.entries(groups).map(([cat, items]) => `
-        <div class="category-group">
-          <div class="cat-group-title">${cat} <small style="font-weight:400;color:var(--ink-3)">(${items.length})</small></div>
-          <div class="posts-list">
-            ${items.map(item => `
-              <div class="post-item">
-                <img class="post-thumb" src="${item.image}" alt="${item.title}">
-                <span class="post-title-text">${item.title}</span>
-                <button class="btn-delete" onclick="deletePost('${item.id}', '${item.title.replace(/'/g,"\\'")}')">Delete</button>
+      status.textContent = "Saving to database…";
+      await addDoc(collection(db, "designs"), { title, category, image:imageUrl, featured, timestamp:new Date() });
+
+      fill.style.width = '100%';
+      setTimeout(() => { progWrap.style.display = 'none'; fill.style.width = '0%'; }, 800);
+
+      status.className = 'success';
+      status.textContent = "✅ Uploaded successfully!";
+      document.getElementById('designTitle').value    = '';
+      document.getElementById('designCategory').value = '';
+      document.getElementById('featuredCheck').checked = false;
+      document.getElementById('imgClearBtn').click();
+
+    } catch(err) {
+      console.error(err);
+      progWrap.style.display = 'none'; fill.style.width = '0%';
+      status.className = 'error';
+      status.textContent = "❌ Upload failed. Please try again.";
+    }
+  };
+
+  /* ── LIVE DATA ── */
+  let allDocs      = [];
+  let sortMode     = 'newest';
+  let searchTerm   = '';
+  let filterCatVal = '';
+
+  function startListening() {
+    const q = query(collection(db, "designs"), orderBy("timestamp", "desc"));
+    onSnapshot(q, snapshot => {
+      allDocs = snapshot.docs.map(d => ({ id:d.id, ...d.data() }));
+      renderAnalytics();
+      renderPosts();
+      renderReorder();
+      buildCatSuggestions();
+    });
+  }
+
+  function buildCatSuggestions() {
+    const cats    = [...new Set(allDocs.map(d => d.category).filter(Boolean))].sort();
+    const datalist = document.getElementById('catSuggestions');
+    datalist.innerHTML = cats.map(c => `<option value="${c}">`).join('');
+    const sel = document.getElementById('filterCat');
+    const prev = sel.value;
+    sel.innerHTML = '<option value="">All Categories</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    sel.value = prev;
+  }
+
+  /* ── ANALYTICS ── */
+  function renderAnalytics() {
+    const cats     = [...new Set(allDocs.map(d => d.category).filter(Boolean))];
+    const featured = allDocs.filter(d => d.featured).length;
+    const latestCat= allDocs[0]?.category || '—';
+
+    document.getElementById('aTotalPosts').innerHTML = `${allDocs.length}<span style="color:var(--accent)">+</span>`;
+    document.getElementById('aTotalCats').innerHTML  = `${cats.length}<span style="color:var(--accent)">+</span>`;
+    document.getElementById('aFeatured').innerHTML   = `${featured}<span style="color:var(--accent)">★</span>`;
+    document.getElementById('aLatestCat').textContent = latestCat;
+
+    // Category breakdown bars
+    const breakdown = document.getElementById('catBreakdown');
+    const counts    = {};
+    allDocs.forEach(d => { const c = d.category || 'Uncategorised'; counts[c] = (counts[c]||0)+1; });
+    const max = Math.max(...Object.values(counts), 1);
+    breakdown.innerHTML = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([cat,cnt]) => `
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-size:13px;min-width:130px;color:var(--ink-2)">${cat}</span>
+        <div style="flex:1;height:8px;background:var(--paper-3);border-radius:4px;overflow:hidden;">
+          <div style="height:100%;width:${(cnt/max)*100}%;background:var(--accent);border-radius:4px;transition:width .6s ease;"></div>
+        </div>
+        <span style="font-size:13px;color:var(--ink-3);min-width:28px;text-align:right">${cnt}</span>
+      </div>
+    `).join('');
+
+    // Recent 5
+    const recentList = document.getElementById('recentList');
+    if (allDocs.length === 0) { recentList.innerHTML = '<p style="color:var(--ink-3);font-size:14px">No uploads yet.</p>'; return; }
+    recentList.innerHTML = allDocs.slice(0,5).map(d => `
+      <div class="recent-item">
+        <img class="recent-thumb" src="${d.image}" alt="${d.title}">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.title}</div>
+          <div style="font-size:12px;color:var(--ink-3)">${d.category || '—'}</div>
+        </div>
+        ${d.featured ? '<span style="font-size:11px;color:var(--accent);font-weight:600">★ Featured</span>' : ''}
+      </div>
+    `).join('');
+  }
+
+  /* ── POSTS ── */
+  document.getElementById('searchInput').addEventListener('input', function() {
+    searchTerm = this.value.toLowerCase(); renderPosts();
+  });
+  document.getElementById('filterCat').addEventListener('change', function() {
+    filterCatVal = this.value; renderPosts();
+  });
+
+  window.sortPosts = function(mode) { sortMode = mode; renderPosts(); };
+
+  function renderPosts() {
+    let docs = [...allDocs];
+
+    if (searchTerm)   docs = docs.filter(d => d.title?.toLowerCase().includes(searchTerm) || d.category?.toLowerCase().includes(searchTerm));
+    if (filterCatVal) docs = docs.filter(d => d.category === filterCatVal);
+
+    if (sortMode === 'oldest') docs.reverse();
+    if (sortMode === 'az')     docs.sort((a,b) => (a.title||'').localeCompare(b.title||''));
+
+    document.getElementById('postCount').textContent = `${docs.length} post${docs.length !== 1 ? 's' : ''}`;
+
+    const container = document.getElementById('postsContainer');
+    if (docs.length === 0) { container.innerHTML = '<p class="posts-empty">No posts match your search.</p>'; return; }
+
+    // Group by category
+    const groups = {};
+    docs.forEach(d => { const c = d.category || 'Uncategorised'; if(!groups[c]) groups[c]=[]; groups[c].push(d); });
+
+    container.innerHTML = Object.entries(groups).map(([cat, items]) => `
+      <div class="category-group">
+        <div class="cat-group-title">${cat} <small style="font-weight:400">(${items.length})</small></div>
+        <div class="posts-list">
+          ${items.map(item => `
+            <div class="post-item${item.featured?' featured':''}">
+              <img class="post-thumb" src="${item.image}" alt="${item.title}"
+                   onclick="openZoom('${item.image}')">
+              <div class="post-info">
+                <div class="post-title-text">${item.title}</div>
+                <div class="post-meta-text">${item.category || '—'} · ${item.timestamp?.toDate ? item.timestamp.toDate().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '—'}</div>
               </div>
-            `).join('')}
+              <div class="post-actions">
+                <button class="btn-sm edit" onclick="openEdit('${item.id}','${esc(item.title)}','${esc(item.category||'')}')">Edit</button>
+                <button class="btn-sm feature${item.featured?' on':''}"
+                        onclick="toggleFeature('${item.id}',${!!item.featured})">
+                  ${item.featured ? '★ Featured' : '☆ Feature'}
+                </button>
+                <button class="btn-sm del" onclick="deletePost('${item.id}','${esc(item.title)}')">Delete</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function esc(s) { return (s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+  /* ── FEATURE TOGGLE ── */
+  window.toggleFeature = async function(id, isFeatured) {
+    try {
+      await updateDoc(doc(db, "designs", id), { featured: !isFeatured });
+    } catch(err) { console.error(err); alert("Failed to update."); }
+  };
+
+  /* ── EDIT ── */
+  window.openEdit = function(id, title, cat) {
+    document.getElementById('editId').value    = id;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editCat').value   = cat;
+    document.getElementById('editModal').classList.add('open');
+  };
+  window.closeModal = function() {
+    document.getElementById('editModal').classList.remove('open');
+    document.getElementById('zoomModal').classList.remove('open');
+  };
+  window.saveEdit = async function() {
+    const id    = document.getElementById('editId').value;
+    const title = document.getElementById('editTitle').value.trim();
+    const cat   = document.getElementById('editCat').value.trim();
+    if (!title || !cat) { alert("Fields cannot be empty."); return; }
+    try {
+      await updateDoc(doc(db, "designs", id), { title, category:cat });
+      closeModal();
+    } catch(err) { console.error(err); alert("Save failed!"); }
+  };
+
+  /* ── ZOOM ── */
+  window.openZoom = function(src) {
+    document.getElementById('zoomImg').src = src;
+    document.getElementById('zoomModal').classList.add('open');
+  };
+  window.closeZoom = function() { document.getElementById('zoomModal').classList.remove('open'); };
+
+  /* ── DELETE ── */
+  window.deletePost = async function(id, title) {
+    if (!confirm(`Delete "${title}"?\nThis cannot be undone.`)) return;
+    try { await deleteDoc(doc(db, "designs", id)); }
+    catch(err) { console.error(err); alert("Delete failed!"); }
+  };
+
+  /* ── SETTINGS ── */
+  window.toggleSetting = function(btn) {
+    btn.classList.toggle('on');
+    if (btn.id === 'settingsDark') applyThemeToggle();
+  };
+
+  window.changePassword = function() {
+    const curr   = document.getElementById('currPw').value;
+    const newPw  = document.getElementById('newPw').value;
+    const confPw = document.getElementById('confPw').value;
+    const status = document.getElementById('pwChangeStatus');
+    if (curr !== adminPassword) { status.style.color='#c0392b'; status.textContent='Current password is incorrect.'; return; }
+    if (newPw.length < 6)       { status.style.color='#c0392b'; status.textContent='New password must be at least 6 characters.'; return; }
+    if (newPw !== confPw)       { status.style.color='#c0392b'; status.textContent='Passwords do not match.'; return; }
+    adminPassword = newPw;
+    localStorage.setItem('bc-admin-pw', newPw);
+    ['currPw','newPw','confPw'].forEach(id => document.getElementById(id).value='');
+    status.style.color='#2d7a4e'; status.textContent='✅ Password updated successfully.';
+    setTimeout(() => status.textContent='', 4000);
+  };
+
+  /* Close modals on overlay click */
+  document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+  /* ══════════════════════════════════════
+     DRAG-TO-REORDER
+  ══════════════════════════════════════ */
+  let reorderDocs   = [];   // current sorted list in the UI
+  let orderChanged  = false;
+  let dragSrc       = null;
+  let touchItem     = null;
+  let touchClone    = null;
+  let touchStartY   = 0;
+
+  function renderReorder() {
+    // Sort by sortOrder field if present, then by timestamp
+    reorderDocs = [...allDocs].sort((a, b) => {
+      const aO = a.sortOrder ?? 999999;
+      const bO = b.sortOrder ?? 999999;
+      if (aO !== bO) return aO - bO;
+      return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
+    });
+
+    const list = document.getElementById('reorderList');
+    list.innerHTML = reorderDocs.length === 0
+      ? '<p class="posts-empty">No posts yet.</p>'
+      : reorderDocs.map((d, i) => `
+        <div class="reorder-item" draggable="true" data-id="${d.id}" data-idx="${i}">
+          <span class="drag-handle" title="Drag to reorder">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" opacity=".5">
+              <line x1="3" y1="8"  x2="21" y2="8"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="16" x2="21" y2="16"/>
+            </svg>
+          </span>
+          <span class="reorder-num">${i + 1}</span>
+          <img class="post-thumb" src="${d.image}" alt="${d.title}" style="pointer-events:none;">
+          <div class="post-info" style="pointer-events:none;">
+            <div class="post-title-text">${d.title}</div>
+            <div class="post-meta-text">${d.category || '—'}</div>
           </div>
+          ${d.featured ? '<span style="font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap;">★ Featured</span>' : ''}
         </div>
       `).join('');
-    }
 
-    window.deletePost = async function (id, title) {
-      if (!confirm(`"${title}" delete කරන්නද?\nමෙය undo කළ නොහැක.`)) return;
-      try {
-        await deleteDoc(doc(db, "designs", id));
-      } catch (err) {
-        console.error(err);
-        alert("Delete අසාර්ථකයි!");
-      }
-    };
-  </script>
+    attachDragEvents();
+    document.getElementById('saveOrderBtn').style.display  = 'none';
+    document.getElementById('reorderStatus').textContent   = '';
+    orderChanged = false;
+  }
+
+  function attachDragEvents() {
+    const items = document.querySelectorAll('.reorder-item');
+
+    items.forEach(item => {
+      /* ── Desktop drag ── */
+      item.addEventListener('dragstart', e => {
+        dragSrc = item;
+        item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      item.addEventListener('dragend', () => {
+        dragSrc = null;
+        document.querySelectorAll('.reorder-item').forEach(i => {
+          i.classList.remove('dragging', 'drag-over');
+        });
+      });
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        if (!dragSrc || dragSrc === item) return;
+        document.querySelectorAll('.reorder-item').forEach(i => i.classList.remove('drag-over'));
+        item.classList.add('drag-over');
+      });
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        if (!dragSrc || dragSrc === item) return;
+        const list   = document.getElementById('reorderList');
+        const items  = [...list.querySelectorAll('.reorder-item')];
+        const srcIdx = items.indexOf(dragSrc);
+        const tgtIdx = items.indexOf(item);
+        if (srcIdx < tgtIdx) list.insertBefore(dragSrc, item.nextSibling);
+        else                  list.insertBefore(dragSrc, item);
+        onOrderChanged();
+      });
+
+      /* ── Mobile touch ── */
+      const handle = item.querySelector('.drag-handle');
+      handle.addEventListener('touchstart', e => {
+        touchItem  = item;
+        touchStartY = e.touches[0].clientY;
+
+        // Build a floating clone
+        touchClone = item.cloneNode(true);
+        touchClone.style.cssText = `
+          position:fixed;left:${item.getBoundingClientRect().left}px;
+          top:${item.getBoundingClientRect().top}px;
+          width:${item.offsetWidth}px;opacity:.85;
+          pointer-events:none;z-index:9999;
+          box-shadow:0 8px 30px rgba(0,0,0,.2);border-radius:6px;
+          background:var(--paper);
+        `;
+        document.body.appendChild(touchClone);
+        item.style.opacity = '0.3';
+        e.preventDefault();
+      }, { passive: false });
+
+      handle.addEventListener('touchmove', e => {
+        if (!touchClone) return;
+        e.preventDefault();
+        const dy = e.touches[0].clientY - touchStartY;
+        const origTop = touchItem.getBoundingClientRect().top;
+        touchClone.style.top = (origTop + dy) + 'px';
+
+        // Find the item under the touch point
+        touchClone.style.display = 'none';
+        const el = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+        touchClone.style.display = '';
+        const target = el?.closest('.reorder-item');
+        if (target && target !== touchItem) {
+          document.querySelectorAll('.reorder-item').forEach(i => i.classList.remove('drag-over'));
+          target.classList.add('drag-over');
+        }
+      }, { passive: false });
+
+      handle.addEventListener('touchend', e => {
+        if (!touchClone) return;
+        document.body.removeChild(touchClone);
+        touchClone = null;
+        touchItem.style.opacity = '';
+
+        const el     = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+        const target = el?.closest('.reorder-item');
+        if (target && target !== touchItem) {
+          const list  = document.getElementById('reorderList');
+          const items = [...list.querySelectorAll('.reorder-item')];
+          const si = items.indexOf(touchItem);
+          const ti = items.indexOf(target);
+          if (si < ti) list.insertBefore(touchItem, target.nextSibling);
+          else         list.insertBefore(touchItem, target);
+          onOrderChanged();
+        }
+        document.querySelectorAll('.reorder-item').forEach(i => i.classList.remove('drag-over'));
+        touchItem = null;
+      });
+    });
+  }
+
+  function onOrderChanged() {
+    orderChanged = true;
+    document.getElementById('saveOrderBtn').style.display = 'inline-flex';
+    document.getElementById('reorderStatus').textContent  = 'Unsaved changes…';
+    // Re-number
+    document.querySelectorAll('.reorder-item').forEach((el, i) => {
+      el.querySelector('.reorder-num').textContent = i + 1;
+    });
+  }
+
+  window.saveOrder = async function() {
+    const btn    = document.getElementById('saveOrderBtn');
+    const status = document.getElementById('reorderStatus');
+    btn.disabled = true;
+    status.textContent = 'Saving…';
+
+    const items = [...document.querySelectorAll('.reorder-item')];
+    try {
+      // Batch-write sortOrder to each doc
+      const { writeBatch } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+      const batch = writeBatch(db);
+      items.forEach((el, i) => {
+        batch.update(doc(db, "designs", el.dataset.id), { sortOrder: i });
+      });
+      await batch.commit();
+      status.textContent = '✅ Order saved!';
+      btn.style.display  = 'none';
+      orderChanged = false;
+      setTimeout(() => status.textContent = '', 3000);
+    } catch(err) {
+      console.error(err);
+      status.textContent = '❌ Save failed.';
+    }
+    btn.disabled = false;
+  };
+
+  // Re-render reorder list whenever data changes
+  const _origStartListening = startListening;
+</script>
 
 </body>
 </html>

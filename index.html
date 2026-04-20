@@ -1,218 +1,364 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brand Creations — Design Portfolio</title>
+  <title>Brand Creations — Graphic Design Portfolio</title>
+  <meta name="description" content="Professional graphic design portfolio — logos, branding, social media, and more.">
+  <meta property="og:title" content="Brand Creations — Graphic Design Portfolio">
+  <meta property="og:description" content="Clean, professional branding solutions.">
+  <meta property="og:type" content="website">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <nav>
-      <a class="logo" href="#">BRAND <span>CREATIONS</span></a>
-      <ul>
-        <li><a href="#portfolio">Portfolio</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+<header>
+  <nav>
+    <a class="logo" href="#">BRAND <span>CREATIONS</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode"></button></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
 
-  <main>
+<main>
 
-    <!-- ─── HERO ─── -->
-    <section class="hero">
-      <span class="hero-label">Graphic Design Portfolio</span>
-      <h1>Crafting <em>visual identities</em> that endure.</h1>
-      <p>Clean, professional branding solutions — logos, social media, and beyond.</p>
-    </section>
-
-    <!-- ─── FILTER BAR ─── -->
-    <section class="filter-section" id="portfolio">
-      <div class="filter-bar" id="filterBar">
-        <button class="filter-btn active" data-filter="all">Show All</button>
-        <!-- Dynamic category buttons injected here -->
-      </div>
-    </section>
-
-    <!-- ─── GALLERY ─── -->
-    <section class="gallery-section">
-      <div class="gallery" id="designGallery">
-        <div class="gallery-empty">Loading designs…</div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ─── LIGHTBOX ─── -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
-    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
-    <div class="lightbox-inner">
-      <img id="lightboxImg" src="" alt="">
-      <p class="lightbox-caption" id="lightboxCaption"></p>
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg-blob blob1"></div>
+    <div class="hero-bg-blob blob2"></div>
+    <span class="hero-label">Graphic Design Portfolio</span>
+    <h1>Crafting <em>visual identities</em> that endure.</h1>
+    <p class="hero-sub">Clean, professional branding solutions — logos, social media, posters and beyond. Every pixel with purpose.</p>
+    <div class="hero-actions">
+      <a href="#portfolio" class="btn-primary">
+        View Work
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
     </div>
-  </div>
-
-  <!-- ─── CONTACT ─── -->
-  <section class="contact-section" id="contact">
-    <div class="contact-inner">
-      <span class="section-label">Get In Touch</span>
-      <h2 class="section-title">Let's work<br>together.</h2>
-      <p class="section-sub">Have a project in mind? Send a message and I'll get back to you within 24 hours.</p>
-
-      <form class="contact-form" id="contactForm" onsubmit="handleContact(event)">
-        <div class="form-row">
-          <div class="field">
-            <label for="cName">Your Name</label>
-            <input type="text" id="cName" placeholder="Amal Perera" required>
-          </div>
-          <div class="field">
-            <label for="cEmail">Email Address</label>
-            <input type="email" id="cEmail" placeholder="amal@example.com" required>
-          </div>
-        </div>
-        <div class="field">
-          <label for="cSubject">Subject</label>
-          <input type="text" id="cSubject" placeholder="Logo design for my startup">
-        </div>
-        <div class="field">
-          <label for="cMsg">Message</label>
-          <textarea id="cMsg" placeholder="Tell me about your project…" required></textarea>
-        </div>
-        <div class="form-success" id="formSuccess">
-          ✅ Thank you! Your message has been sent.
-        </div>
-        <button class="btn-primary" type="submit">
-          Send Message
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </form>
+    <div class="scroll-hint">
+      <div class="scroll-hint-line"></div>
+      Scroll to explore
     </div>
   </section>
 
-  <footer>
-    <span>© 2025 Brand Creations. All rights reserved.</span>
-    <span>Design by Brand Creations</span>
-  </footer>
+  <!-- ── STATS ── -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat"><div class="stat-num" id="statTotal">–<span>+</span></div><div class="stat-label">Projects</div></div>
+    <div class="stat"><div class="stat-num" id="statCats">–<span>+</span></div><div class="stat-label">Categories</div></div>
+    <div class="stat"><div class="stat-num">3<span>+</span></div><div class="stat-label">Years Experience</div></div>
+    <div class="stat"><div class="stat-num">100<span>%</span></div><div class="stat-label">Client Satisfaction</div></div>
+  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <!-- ── FILTER ── -->
+  <section class="filter-section" id="portfolio">
+    <div class="filter-header">
+      <h2 class="filter-title">Selected Works</h2>
+      <div class="view-toggle">
+        <button class="view-btn active" id="viewGrid" title="Grid view">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-btn" id="viewList" title="List view">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all">Show All</button>
+    </div>
+  </section>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDpqsGsSb2Tsr9pvYdTJ-Spwazn06USVT4",
-      authDomain: "myportfolio-2df2d.firebaseapp.com",
-      projectId: "myportfolio-2df2d",
-      storageBucket: "myportfolio-2df2d.firebasestorage.app",
-      messagingSenderId: "352039299631",
-      appId: "1:352039299631:web:fee9e9fa9da5bd479634da",
-      measurementId: "G-LP623XPYR9"
-    };
+  <!-- ── GALLERY ── -->
+  <section class="gallery-section">
+    <div class="gallery" id="designGallery">
+      <div class="gallery-empty">Loading designs…</div>
+    </div>
+  </section>
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
+  <!-- ── ABOUT ── -->
+  <section class="about-section" id="about">
+    <div class="about-img-wrap">
+      <div class="about-img-placeholder">
+        <!-- Replace with your actual photo: <img src="your-photo.jpg" alt="Designer"> -->
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+    </div>
+    <div class="about-content">
+      <span class="section-label">About Me</span>
+      <h2>Passionate about design that communicates.</h2>
+      <p>I'm a graphic designer specialising in brand identity, print, and digital media. With over 3 years of experience, I help businesses build visual languages that resonate with their audiences.</p>
+      <p>Every project begins with listening — understanding the story behind the brand — and ends with a design system that works beautifully across every touchpoint.</p>
+      <div class="skills-grid">
+        <span class="skill-tag">Logo Design</span>
+        <span class="skill-tag">Brand Identity</span>
+        <span class="skill-tag">Social Media</span>
+        <span class="skill-tag">Print Design</span>
+        <span class="skill-tag">Typography</span>
+        <span class="skill-tag">Illustrator</span>
+        <span class="skill-tag">Photoshop</span>
+        <span class="skill-tag">Figma</span>
+      </div>
+      <a href="#contact" class="btn-primary">Work With Me</a>
+    </div>
+  </section>
 
-    const gallery   = document.getElementById('designGallery');
-    const filterBar = document.getElementById('filterBar');
+</main>
 
-    let allDesigns      = [];
-    let activeFilter    = 'all';
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#8592;</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#8594;</button>
+  <div class="lightbox-inner">
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-meta">
+      <div class="lightbox-title" id="lightboxTitle"></div>
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
 
-    // ── FETCH & RENDER ──
-    const q = query(collection(db, "designs"), orderBy("timestamp", "desc"));
+<!-- ── CONTACT ── -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <span class="section-label">Get In Touch</span>
+    <h2 class="section-title">Let's work<br>together.</h2>
+    <p class="section-sub">Have a project in mind? Send a message and I'll get back to you within 24 hours.</p>
+    <form class="contact-form" id="contactForm" onsubmit="handleContact(event)">
+      <div class="form-row">
+        <div class="field">
+          <label for="cName">Your Name</label>
+          <input type="text" id="cName" placeholder="Amal Perera" required>
+        </div>
+        <div class="field">
+          <label for="cEmail">Email Address</label>
+          <input type="email" id="cEmail" placeholder="amal@example.com" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="cSubject">Subject</label>
+        <input type="text" id="cSubject" placeholder="Logo design for my startup">
+      </div>
+      <div class="field">
+        <label for="cMsg">Message</label>
+        <textarea id="cMsg" placeholder="Tell me about your project…" required></textarea>
+      </div>
+      <div class="form-success" id="formSuccess">✅ Thank you! I'll be in touch soon.</div>
+      <button class="btn-primary" type="submit">
+        Send Message
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+  </div>
+</section>
 
-    onSnapshot(q, (snapshot) => {
-      allDesigns = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      buildFilters();
-      renderGallery();
+<footer>
+  <span>© 2025 Brand Creations. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="#portfolio">Portfolio</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, query, orderBy, onSnapshot }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpqsGsSb2Tsr9pvYdTJ-Spwazn06USVT4",
+    authDomain: "myportfolio-2df2d.firebaseapp.com",
+    projectId: "myportfolio-2df2d",
+    storageBucket: "myportfolio-2df2d.firebasestorage.app",
+    messagingSenderId: "352039299631",
+    appId: "1:352039299631:web:fee9e9fa9da5bd479634da",
+    measurementId: "G-LP623XPYR9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  let allDesigns   = [];
+  let activeFilter = 'all';
+  let currentView  = 'grid';
+  let lightboxIdx  = 0;
+  let filteredList = [];
+
+  // ── DARK MODE ──
+  const themeToggle = document.getElementById('themeToggle');
+  const savedTheme  = localStorage.getItem('bc-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  themeToggle.addEventListener('click', () => {
+    const curr = document.documentElement.getAttribute('data-theme');
+    const next = curr === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('bc-theme', next);
+  });
+
+  // ── HAMBURGER ──
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if (!hamburger.contains(e.target) && !navLinks.contains(e.target))
+      navLinks.classList.remove('open');
+  });
+
+  // ── VIEW TOGGLE ──
+  document.getElementById('viewGrid').addEventListener('click', function() {
+    currentView = 'grid';
+    document.getElementById('designGallery').classList.remove('view-list');
+    this.classList.add('active');
+    document.getElementById('viewList').classList.remove('active');
+  });
+  document.getElementById('viewList').addEventListener('click', function() {
+    currentView = 'list';
+    document.getElementById('designGallery').classList.add('view-list');
+    this.classList.add('active');
+    document.getElementById('viewGrid').classList.remove('active');
+  });
+
+  // ── FIREBASE ──
+  const q = query(collection(db, "designs"), orderBy("timestamp", "desc"));
+  onSnapshot(q, (snapshot) => {
+    allDesigns = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    // Respect admin drag-reorder (sortOrder field), fallback to timestamp desc
+    allDesigns.sort((a, b) => {
+      const aO = a.sortOrder ?? 999999;
+      const bO = b.sortOrder ?? 999999;
+      if (aO !== bO) return aO - bO;
+      return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
     });
+    buildFilters();
+    renderGallery();
+    updateStats();
+  });
 
-    function buildFilters() {
-      const cats = [...new Set(allDesigns.map(d => d.category).filter(Boolean))].sort();
-      // Remove old dynamic buttons (keep "Show All")
-      [...filterBar.querySelectorAll('.filter-btn[data-filter]:not([data-filter="all"])')].forEach(b => b.remove());
-      cats.forEach(cat => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.dataset.filter = cat;
-        btn.textContent = cat;
-        btn.addEventListener('click', () => setFilter(cat, btn));
-        filterBar.appendChild(btn);
-      });
+  function updateStats() {
+    const cats = new Set(allDesigns.map(d => d.category).filter(Boolean));
+    document.getElementById('statTotal').innerHTML = `${allDesigns.length}<span>+</span>`;
+    document.getElementById('statCats').innerHTML  = `${cats.size}<span>+</span>`;
+  }
+
+  function buildFilters() {
+    const bar  = document.getElementById('filterBar');
+    const cats = [...new Set(allDesigns.map(d => d.category).filter(Boolean))].sort();
+    [...bar.querySelectorAll('.filter-btn:not([data-filter="all"])')].forEach(b => b.remove());
+    cats.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.dataset.filter = cat;
+      btn.textContent = cat;
+      btn.addEventListener('click', () => setFilter(cat, btn));
+      bar.appendChild(btn);
+    });
+  }
+
+  function setFilter(filter, btn) {
+    activeFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGallery();
+  }
+
+  document.querySelector('[data-filter="all"]').addEventListener('click', function() {
+    setFilter('all', this);
+  });
+
+  function renderGallery() {
+    const gallery = document.getElementById('designGallery');
+    filteredList  = activeFilter === 'all'
+      ? allDesigns
+      : allDesigns.filter(d => d.category === activeFilter);
+
+    if (filteredList.length === 0) {
+      gallery.innerHTML = '<div class="gallery-empty">No designs in this category yet.</div>';
+      return;
     }
 
-    function setFilter(filter, btn) {
-      activeFilter = filter;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderGallery();
-    }
-
-    filterBar.querySelector('[data-filter="all"]').addEventListener('click', function () {
-      setFilter('all', this);
-    });
-
-    function renderGallery() {
-      const filtered = activeFilter === 'all'
-        ? allDesigns
-        : allDesigns.filter(d => d.category === activeFilter);
-
-      if (filtered.length === 0) {
-        gallery.innerHTML = '<div class="gallery-empty">No designs found.</div>';
-        return;
-      }
-
-      gallery.innerHTML = filtered.map(d => `
-        <div class="design-card" data-img="${d.image}" data-title="${d.title}" data-cat="${d.category || ''}">
-          <img src="${d.image}" alt="${d.title}" loading="lazy">
-          <div class="overlay">
-            <div class="overlay-title">${d.title}</div>
-            ${d.category ? `<div class="overlay-cat">${d.category}</div>` : ''}
+    gallery.innerHTML = filteredList.map((d, i) => `
+      <div class="design-card${d.featured ? ' featured' : ''}"
+           data-idx="${i}"
+           style="animation-delay:${Math.min(i * 0.07, 0.5)}s">
+        <img src="${d.image}" alt="${d.title}" loading="lazy">
+        <div class="overlay">
+          <div class="overlay-title">${d.title}</div>
+          ${d.category ? `<div class="overlay-cat">${d.category}</div>` : ''}
+          <div class="overlay-view">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            View
           </div>
         </div>
-      `).join('');
+      </div>
+    `).join('');
 
-      // Attach lightbox listeners
-      gallery.querySelectorAll('.design-card').forEach(card => {
-        card.addEventListener('click', () => {
-          openLightbox(card.dataset.img, card.dataset.title, card.dataset.cat);
-        });
-      });
-    }
+    gallery.querySelectorAll('.design-card').forEach(card => {
+      card.addEventListener('click', () => openLightbox(+card.dataset.idx));
+    });
+  }
 
-    // ── LIGHTBOX ──
-    const lightbox       = document.getElementById('lightbox');
-    const lightboxImg    = document.getElementById('lightboxImg');
-    const lightboxCaption = document.getElementById('lightboxCaption');
+  // ── LIGHTBOX ──
+  const lightbox = document.getElementById('lightbox');
 
-    function openLightbox(src, title, cat) {
-      lightboxImg.src = src;
-      lightboxImg.alt = title;
-      lightboxCaption.textContent = cat ? `${title} — ${cat}` : title;
-      lightbox.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
+  function openLightbox(idx) {
+    lightboxIdx = idx;
+    showSlide(idx);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
 
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  function showSlide(idx) {
+    const d = filteredList[idx];
+    document.getElementById('lightboxImg').src      = d.image;
+    document.getElementById('lightboxImg').alt      = d.title;
+    document.getElementById('lightboxTitle').textContent   = d.title;
+    document.getElementById('lightboxCaption').textContent = d.category || '';
+    document.getElementById('lightboxCounter').textContent = `${idx + 1} / ${filteredList.length}`;
+  }
 
-    function closeLightbox() {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
-    }
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
 
-    // ── CONTACT FORM ──
-    window.handleContact = function (e) {
-      e.preventDefault();
-      // In a real project, connect to EmailJS, Formspree, or a backend here.
-      document.getElementById('formSuccess').style.display = 'flex';
-      e.target.reset();
-      setTimeout(() => {
-        document.getElementById('formSuccess').style.display = 'none';
-      }, 5000);
-    };
-  </script>
+  document.getElementById('lightboxPrev').addEventListener('click', () => {
+    lightboxIdx = (lightboxIdx - 1 + filteredList.length) % filteredList.length;
+    showSlide(lightboxIdx);
+  });
+  document.getElementById('lightboxNext').addEventListener('click', () => {
+    lightboxIdx = (lightboxIdx + 1) % filteredList.length;
+    showSlide(lightboxIdx);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape')     closeLightbox();
+    if (e.key === 'ArrowLeft')  { lightboxIdx = (lightboxIdx - 1 + filteredList.length) % filteredList.length; showSlide(lightboxIdx); }
+    if (e.key === 'ArrowRight') { lightboxIdx = (lightboxIdx + 1) % filteredList.length; showSlide(lightboxIdx); }
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ── CONTACT ──
+  window.handleContact = function(e) {
+    e.preventDefault();
+    // Connect EmailJS / Formspree here for real sending
+    document.getElementById('formSuccess').style.display = 'flex';
+    e.target.reset();
+    setTimeout(() => document.getElementById('formSuccess').style.display = 'none', 6000);
+  };
+</script>
 
 </body>
 </html>
