@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Brand Creations</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+
+  <!-- ─── LOGIN SCREEN ─── -->
+  <div class="login-wrap" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">BRAND <span>CREATIONS</span></div>
+      <p class="login-sub">Admin access only. Enter your password to continue.</p>
+
+      <div class="field">
+        <label for="pwInput">Password</label>
+        <input type="password" id="pwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <button class="btn-primary" onclick="doLogin()" style="width:100%; justify-content:center;">
+        Sign In
+      </button>
+      <p class="login-error" id="loginError">Incorrect password. Please try again.</p>
+    </div>
+  </div>
+
+  <!-- ─── ADMIN DASHBOARD ─── -->
+  <div class="admin-shell" id="adminShell">
+
+    <div class="admin-topbar">
+      <div class="topbar-logo">BRAND <span>CREATIONS</span> <small style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink-3);font-weight:400;margin-left:8px;">Admin</small></div>
+      <button class="btn-logout" onclick="doLogout()">Log Out</button>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Upload Card -->
+      <div class="admin-card">
+        <div class="admin-card-title">Upload New Design</div>
+
+        <div class="upload-form">
+          <div class="field">
+            <label for="designTitle">Project Title</label>
+            <input type="text" id="designTitle" placeholder="e.g. Logo for Acme Brand">
+          </div>
+
+          <div class="field">
+            <label for="designCategory">Category</label>
+            <input type="text" id="designCategory" placeholder="e.g. Logo, Branding, Social Media, Poster…">
+          </div>
+
+          <div class="field">
+            <label for="imageInput">Image File</label>
+            <input type="file" id="imageInput" accept="image/*">
+          </div>
+
+          <button class="btn-primary" onclick="handleUpload()">
+            Upload to Portfolio
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          </button>
+
+          <p id="uploadStatus"></p>
+        </div>
+      </div>
+
+      <!-- Manage Posts Card -->
+      <div class="admin-card">
+        <div class="admin-card-title">Manage Posts</div>
+        <div id="postsContainer">
+          <div class="posts-empty">Loading posts…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot }
+      from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // ── KEEP CONFIGS INTACT ──
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpqsGsSb2Tsr9pvYdTJ-Spwazn06USVT4",
+      authDomain: "myportfolio-2df2d.firebaseapp.com",
+      projectId: "myportfolio-2df2d",
+      storageBucket: "myportfolio-2df2d.firebasestorage.app",
+      messagingSenderId: "352039299631",
+      appId: "1:352039299631:web:fee9e9fa9da5bd479634da",
+      measurementId: "G-LP623XPYR9"
+    };
+
+    const imgbb_api_key = "3defd2c239f53c492eaa9b7e3bc62687";
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // ── LOGIN ──
+    const ADMIN_PASSWORD = 'admin123';
+
+    window.doLogin = function () {
+      const pw = document.getElementById('pwInput').value;
+      if (pw === ADMIN_PASSWORD) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminShell').style.display  = 'block';
+        startListening();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('pwInput').value = '';
+        document.getElementById('pwInput').focus();
+      }
+    };
+
+    window.doLogout = function () {
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminShell').style.display  = 'none';
+      document.getElementById('pwInput').value = '';
+    };
+
+    // ── UPLOAD ──
+    window.handleUpload = async function () {
+      const title    = document.getElementById('designTitle').value.trim();
+      const category = document.getElementById('designCategory').value.trim();
+      const fileInput = document.getElementById('imageInput');
+      const status   = document.getElementById('uploadStatus');
+
+      if (!title || !category || !fileInput.files[0]) {
+        alert("කරුණාකර Title, Category සහ Image ඇතුළත් කරන්න!");
+        return;
+      }
+
+      status.className = '';
+      status.textContent = "Uploading image to ImgBB…";
+
+      const formData = new FormData();
+      formData.append("image", fileInput.files[0]);
+
+      try {
+        const res  = await fetch(`https://api.imgbb.com/1/upload?key=${imgbb_api_key}`, {
+          method: "POST", body: formData
+        });
+        const data = await res.json();
+        const imageUrl = data.data.url;
+
+        status.textContent = "Saving to Firestore…";
+
+        await addDoc(collection(db, "designs"), {
+          title,
+          category,
+          image: imageUrl,
+          timestamp: new Date()
+        });
+
+        status.className = 'success';
+        status.textContent = "✅ සාර්ථකව Upload වුණා!";
+        document.getElementById('designTitle').value    = '';
+        document.getElementById('designCategory').value = '';
+        fileInput.value = '';
+
+      } catch (err) {
+        console.error(err);
+        status.className = 'error';
+        status.textContent = "❌ Upload අසාර්ථකයි. නැවත උත්සාහ කරන්න.";
+      }
+    };
+
+    // ── LIVE POSTS LIST ──
+    function startListening() {
+      const q = query(collection(db, "designs"), orderBy("timestamp", "desc"));
+      onSnapshot(q, (snapshot) => {
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderPosts(docs);
+      });
+    }
+
+    function renderPosts(docs) {
+      const container = document.getElementById('postsContainer');
+
+      if (docs.length === 0) {
+        container.innerHTML = '<div class="posts-empty">No designs uploaded yet.</div>';
+        return;
+      }
+
+      // Group by category
+      const groups = {};
+      docs.forEach(d => {
+        const cat = d.category || 'Uncategorised';
+        if (!groups[cat]) groups[cat] = [];
+        groups[cat].push(d);
+      });
+
+      container.innerHTML = Object.entries(groups).map(([cat, items]) => `
+        <div class="category-group">
+          <div class="cat-group-title">${cat} <small style="font-weight:400;color:var(--ink-3)">(${items.length})</small></div>
+          <div class="posts-list">
+            ${items.map(item => `
+              <div class="post-item">
+                <img class="post-thumb" src="${item.image}" alt="${item.title}">
+                <span class="post-title-text">${item.title}</span>
+                <button class="btn-delete" onclick="deletePost('${item.id}', '${item.title.replace(/'/g,"\\'")}')">Delete</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.deletePost = async function (id, title) {
+      if (!confirm(`"${title}" delete කරන්නද?\nමෙය undo කළ නොහැක.`)) return;
+      try {
+        await deleteDoc(doc(db, "designs", id));
+      } catch (err) {
+        console.error(err);
+        alert("Delete අසාර්ථකයි!");
+      }
+    };
+  </script>
+
+</body>
+</html>
